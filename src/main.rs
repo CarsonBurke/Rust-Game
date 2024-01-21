@@ -9,7 +9,7 @@ use bevy::{
 use hello::HelloPlugin;
 use types::Position;
 use game_init::game_init;
-use players::player_actions;
+use players::{player_actions, PlayerPlugin};
 
 pub mod types;
 pub mod startup;
@@ -22,18 +22,8 @@ fn main() {
     /* let startup = GameStartup; */
 
     App::new()
-        .add_plugins((DefaultPlugins, HelloPlugin))
+        .add_plugins((DefaultPlugins, HelloPlugin, PlayerPlugin))
         .add_systems(Startup, game_init)
-        .add_systems(Update, player_actions)
+        /* .add_systems(Update, player_actions) */
         .run();
-}
-
-fn print_position_system(query: Query<&Position>) {
-    for position in &query {
-        println!("position: {} {}", position.x, position.y);
-    }
-}
-
-pub fn hello_world() {
-    println!("hello world!");
 }

@@ -15,3 +15,9 @@ pub struct Name(pub String);
 
 #[derive(Component)]
 pub struct Player;
+
+#[derive(Component)]
+pub enum Direction {
+    Up,
+    Down,
+}

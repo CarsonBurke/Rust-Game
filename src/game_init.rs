@@ -1,4 +1,14 @@
-use bevy::{ecs::system::{Commands, Res, Query, ResMut}, core_pipeline::core_2d::Camera2dBundle, sprite::SpriteBundle, asset::{AssetServer, Handle}, utils::default, render::{texture::Image, view::WindowSurfaces}, window::Window, transform::components::Transform};
+use crate::types::Direction;
+use bevy::{
+    asset::{AssetServer, Handle},
+    core_pipeline::core_2d::Camera2dBundle,
+    ecs::system::{Commands, Query, Res, ResMut},
+    render::{texture::Image, view::WindowSurfaces},
+    sprite::SpriteBundle,
+    transform::components::Transform,
+    utils::default,
+    window::Window,
+};
 
 pub struct GameInit;
 
@@ -9,11 +19,14 @@ struct GameTextures {
 
 pub fn game_init(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(Camera2dBundle::default());
-    commands.spawn(SpriteBundle {
-        texture: asset_server.load(PLAYER_SPRITE),
-        transform: Transform::from_xyz(100., 100., 0.),
-        ..default()
-    });
+    commands.spawn((
+        SpriteBundle {
+            texture: asset_server.load(PLAYER_SPRITE),
+            transform: Transform::from_xyz(100., 100., 0.),
+            ..default()
+        },
+        Direction::Up,
+    ));
 
     /* let game_textures = GameTextures {
         player: asset_server.load(PLAYER_SPRITE)
