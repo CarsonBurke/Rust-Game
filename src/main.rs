@@ -6,6 +6,7 @@ use bevy::{
     window::{WindowPlugin, WindowTheme, Window},
     DefaultPlugins,
 };
+use bullets::BulletPlugin;
 use hello::HelloPlugin;
 use structs::Position;
 use game_init::game_init;
@@ -17,12 +18,13 @@ pub mod hello;
 pub mod game_init;
 pub mod players;
 pub mod controls;
+pub mod bullets;
 
 fn main() {
     /* let startup = GameStartup; */
 
     App::new()
-        .add_plugins((DefaultPlugins, HelloPlugin, PlayerPlugin, controls::ControlsPlugin))
+        .add_plugins((DefaultPlugins, HelloPlugin, BulletPlugin, PlayerPlugin, controls::ControlsPlugin))
         .add_systems(Startup, game_init)
         /* .add_systems(Update, player_actions) */
         .run();
