@@ -1,5 +1,17 @@
-use bevy::{prelude::{Plugin, App, Update}, ecs::{system::{Res, Query, Commands}, query::With}, input::{Input, keyboard::KeyCode}, time::Time, transform::components::Transform, asset::AssetServer, utils::default, sprite::SpriteBundle};
-use crate::structs::{Player, Bullet};
+use crate::{structs::{Bullet, Player}, constants::hotkeys};
+use bevy::{
+    asset::AssetServer,
+    ecs::{
+        query::With,
+        system::{Commands, Query, Res},
+    },
+    input::{keyboard::KeyCode, Input},
+    prelude::{App, Plugin, Update},
+    sprite::SpriteBundle,
+    time::Time,
+    transform::components::Transform,
+    utils::default,
+};
 
 pub struct PlayerControlsPlugin;
 
@@ -9,44 +21,52 @@ impl Plugin for PlayerControlsPlugin {
     }
 }
 
-
-fn control_player_movement(input: Res<Input<KeyCode>>, time: Res<Time>, mut player_positions: Query<(&mut Transform), With<Player>>) {
-
-    if input.pressed(KeyCode::W) {
-
+fn control_player_movement(
+    input: Res<Input<KeyCode>>,
+    time: Res<Time>,
+    mut player_positions: Query<(&mut Transform), With<Player>>,
+) {
+    if input.pressed(hotkeys::MOVE_UP) {
         move_players(&mut player_positions, &time, 0., 100.);
     }
-    
-    if input.pressed(KeyCode::S) {
 
+    if input.pressed(hotkeys::MOVE_DOWN) {
         move_players(&mut player_positions, &time, 0., -100.);
     }
 
-    if input.pressed(KeyCode::A) {
-
+    if input.pressed(hotkeys::MOVE_LEFT) {
         move_players(&mut player_positions, &time, -100., 0.);
     }
 
-    if input.pressed(KeyCode::D) {
-
+    if input.pressed(hotkeys::MOVE_RIGHT) {
         move_players(&mut player_positions, &time, 100., 0.);
     }
 }
 
-fn move_players(mut player_positions: &mut Query<(&mut Transform), With<Player>>, time: &Res<Time>, x: f32, y: f32) {
+fn move_players(
+    mut player_positions: &mut Query<(&mut Transform), With<Player>>,
+    time: &Res<Time>,
+    x: f32,
+    y: f32,
+) {
     for (mut transform) in player_positions {
         transform.translation.x += x * time.delta_seconds();
         transform.translation.y += y * time.delta_seconds();
     }
 }
 
-fn control_player_shooting(input: Res<Input<KeyCode>>, mut player_positions: Query<(&mut Transform), With<Player>>, mut commands: Commands, asset_server: Res<AssetServer>) {
+fn control_player_shooting(
+    input: Res<Input<KeyCode>>,
+    mut player_positions: Query<(&mut Transform), With<Player>>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
     if !input.pressed(KeyCode::Space) {
-        return
+        return;
     }
 
     // The player is shooting
-    
+
     for (mut transform) in &mut player_positions {
         commands.spawn((
             SpriteBundle {
@@ -62,6 +82,4 @@ fn control_player_shooting(input: Res<Input<KeyCode>>, mut player_positions: Que
     }
 }
 
-fn players_shoot(mut player_positions: &mut Query<(&mut Transform), With<Player>>) {
-    
-}
+fn players_shoot(mut player_positions: &mut Query<(&mut Transform), With<Player>>) {}

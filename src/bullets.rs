@@ -13,6 +13,6 @@ impl Plugin for BulletPlugin {
 fn move_bullets(time: Res<Time>, mut bullet_positions: Query<(&mut Transform), With<Bullet>>) {
 
     for (mut transform) in &mut bullet_positions {
-        transform.translation.y += 100. * time.delta_seconds();
+        transform.translation.y += 300. * time.delta_seconds();
     }
 }

@@ -2,10 +2,12 @@ use bevy::{app::{App, Plugin, Update}, ecs::{system::{Res, Query}, query::With},
 
 use crate::{structs::Player, controls::PlayerControlsPlugin};
 
+use super::camera_controller::CameraControlsPlugin;
+
 pub struct ControlsPlugin;
 
 impl Plugin for ControlsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(PlayerControlsPlugin);
+        app.add_plugins((PlayerControlsPlugin, CameraControlsPlugin));
     }
 }

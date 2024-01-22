@@ -9,7 +9,7 @@ use bevy::{
     window::Window, math::Vec3,
 };
 
-use crate::structs::Player;
+use crate::{structs::Player, constants::asset_paths};
 
 pub struct GameInit;
 
@@ -22,9 +22,9 @@ pub fn game_init(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(Camera2dBundle::default());
     commands.spawn((
         SpriteBundle {
-            texture: asset_server.load(PLAYER_SPRITE),
+            texture: asset_server.load(asset_paths::PLAYER),
             transform: Transform {
-                translation: Vec3::new(100., 100., 0.),
+                translation: Vec3::new(100., 100., 1.),
                 ..default()
             },
             ..default()
