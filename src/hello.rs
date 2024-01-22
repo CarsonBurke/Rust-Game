@@ -30,6 +30,6 @@ fn greet_people(
     }
     
     for name in &query {
-        println!("hello {}! at time {:?}", name.0, timer.0.tick(time.delta()).duration());
+        /* println!("hello {}! at time {:?}", name.0, timer.0.tick(time.delta()).duration()); */
     }
 }

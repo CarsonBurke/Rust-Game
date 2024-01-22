@@ -1,4 +1,3 @@
-use crate::types::Direction;
 use bevy::{
     asset::{AssetServer, Handle},
     core_pipeline::core_2d::Camera2dBundle,
@@ -7,8 +6,10 @@ use bevy::{
     sprite::SpriteBundle,
     transform::components::Transform,
     utils::default,
-    window::Window,
+    window::Window, math::Vec3,
 };
+
+use crate::types::Player;
 
 pub struct GameInit;
 
@@ -22,10 +23,13 @@ pub fn game_init(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn((
         SpriteBundle {
             texture: asset_server.load(PLAYER_SPRITE),
-            transform: Transform::from_xyz(100., 100., 0.),
+            transform: Transform {
+                translation: Vec3::new(100., 100., 0.),
+                ..default()
+            },
             ..default()
         },
-        Direction::Up,
+        Player,
     ));
 
     /* let game_textures = GameTextures {
