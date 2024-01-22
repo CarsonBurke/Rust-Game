@@ -1,4 +1,4 @@
-use crate::{structs::{Bullet, Player}, constants::hotkeys};
+use crate::{structs::{Bullet, Player}, constants::control_keys};
 use bevy::{
     asset::AssetServer,
     ecs::{
@@ -23,19 +23,19 @@ impl Plugin for CameraControlsPlugin {
 
 fn control_camera_viewport(input: Res<Input<KeyCode>>, mut camera_positions: Query<&mut Transform, With<Camera>>, time: Res<Time>) {
 
-    if input.pressed(hotkeys::MOVE_UP) {
+    if input.pressed(control_keys::MOVE_UP) {
         move_camera_viewport(&mut camera_positions, &time, 0., 100.);
     }
 
-    if input.pressed(hotkeys::MOVE_DOWN) {
+    if input.pressed(control_keys::MOVE_DOWN) {
         move_camera_viewport(&mut camera_positions, &time, 0., -100.);
     }
 
-    if input.pressed(hotkeys::MOVE_LEFT) {
+    if input.pressed(control_keys::MOVE_LEFT) {
         move_camera_viewport(&mut camera_positions, &time, -100., 0.);
     }
 
-    if input.pressed(hotkeys::MOVE_RIGHT) {
+    if input.pressed(control_keys::MOVE_RIGHT) {
         move_camera_viewport(&mut camera_positions, &time, 100., 0.);
     }
 }

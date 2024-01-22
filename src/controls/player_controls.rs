@@ -1,4 +1,4 @@
-use crate::{structs::{Bullet, Player}, constants::hotkeys};
+use crate::{structs::{Bullet, Player}, constants::{control_keys, player}};
 use bevy::{
     asset::AssetServer,
     ecs::{
@@ -26,21 +26,34 @@ fn control_player_movement(
     time: Res<Time>,
     mut player_positions: Query<(&mut Transform), With<Player>>,
 ) {
-    if input.pressed(hotkeys::MOVE_UP) {
-        move_players(&mut player_positions, &time, 0., 100.);
+
+    let speed = find_speed(&input);
+
+    if input.pressed(control_keys::MOVE_UP) {
+        move_players(&mut player_positions, &time, 0., speed);
     }
 
-    if input.pressed(hotkeys::MOVE_DOWN) {
-        move_players(&mut player_positions, &time, 0., -100.);
+    if input.pressed(control_keys::MOVE_DOWN) {
+        move_players(&mut player_positions, &time, 0., -speed);
     }
 
-    if input.pressed(hotkeys::MOVE_LEFT) {
-        move_players(&mut player_positions, &time, -100., 0.);
+    if input.pressed(control_keys::MOVE_LEFT) {
+        move_players(&mut player_positions, &time, -speed, 0.);
     }
 
-    if input.pressed(hotkeys::MOVE_RIGHT) {
-        move_players(&mut player_positions, &time, 100., 0.);
+    if input.pressed(control_keys::MOVE_RIGHT) {
+        move_players(&mut player_positions, &time, speed, 0.);
     }
+}
+
+fn find_speed(input: &Res<Input<KeyCode>>) -> f32 {
+    if input.pressed(control_keys::BOOST) {
+        return player::BOOST_SPEED as f32
+    }
+
+    // Otherwise we aren't boosting
+
+    return player::SPEED as f32
 }
 
 fn move_players(
@@ -61,7 +74,7 @@ fn control_player_shooting(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
 ) {
-    if !input.pressed(KeyCode::Space) {
+    if !input.pressed(control_keys::SHOOT) {
         return;
     }
 
