@@ -1,5 +1,5 @@
 use bevy::{prelude, ecs::system::Commands};
-use crate::{types::{Person, Name}};
+use crate::{structs::{Person, Name}};
 
 pub fn add_people(mut commands: Commands) {
     commands.spawn((Person, Name("Elaina Proctor".to_string())));

@@ -9,7 +9,7 @@ use bevy::{
     window::Window, math::Vec3,
 };
 
-use crate::types::Player;
+use crate::structs::Player;
 
 pub struct GameInit;
 

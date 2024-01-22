@@ -1,5 +1,4 @@
-use crate::{Component};
-extern crate bevy;
+use bevy::prelude::Component;
 
 #[derive(Component)]
 pub struct Position {
@@ -15,3 +14,6 @@ pub struct Name(pub String);
 
 #[derive(Component)]
 pub struct Player;
+
+#[derive(Component)]
+pub struct Bullet;

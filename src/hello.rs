@@ -1,7 +1,7 @@
 extern crate bevy;
 use bevy::{prelude::{App, Plugin}, ecs::{system::{Resource, Res, ResMut, Query}, query::With}, time::{Timer, Time, TimerMode}, app::{Startup, Update}};
 
-use crate::{types::{Name, Person}, startup};
+use crate::{structs::{Name, Person}, startup};
 
 pub struct HelloPlugin;
 

@@ -6,7 +6,7 @@ use bevy::{
     transform::components::Transform,
 };
 
-use crate::types::Player;
+use crate::structs::Player;
 
 pub struct PlayerPlugin;
 
