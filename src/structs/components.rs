@@ -13,7 +13,11 @@ pub struct Person;
 pub struct Name(pub String);
 
 #[derive(Component)]
-pub struct Player;
+pub struct Player {
+    pub health: f32,
+    pub acceleration_x: f32,
+    pub acceleration_y: f32,
+}
 
 #[derive(Component)]
 pub struct Bullet;

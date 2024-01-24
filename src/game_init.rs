@@ -29,11 +29,10 @@ pub fn game_init(mut commands: Commands, asset_server: Res<AssetServer>) {
             },
             ..default()
         },
-        Player,
+        Player {
+            health: 100.,
+            acceleration_x: 0.,
+            acceleration_y: 0.,
+        },
     ));
-
-    /* let game_textures = GameTextures {
-        player: asset_server.load(PLAYER_SPRITE)
-    };
-    commands.insert_resource(game_textures); */
 }
