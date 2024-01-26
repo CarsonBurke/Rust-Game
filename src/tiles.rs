@@ -25,7 +25,7 @@ fn init_tiles(mut commands: Commands, asset_server: Res<AssetServer>) {
                 SpriteBundle {
                     texture: asset_server.load(tile_grass::ASSET_PATH),
                     transform: Transform {
-                        translation: Vec3::new(x as f32, y as f32, 0.),
+                        translation: Vec3::new(x as f32, y as f32, tile_grass::Z_POS),
                         ..default()
                     },
                     ..default()

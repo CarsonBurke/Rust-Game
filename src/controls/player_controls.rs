@@ -1,15 +1,16 @@
-use crate::{structs::{Bullet, Player}, constants::{bullet_player, control_keys, player}};
+use crate::{structs::{Bullet, Player}, constants::{bullet, bullet_player, control_keys, player}};
 use bevy::{
-    asset::AssetServer, ecs::{
+    app::Startup, asset::AssetServer, ecs::{
         event::EventReader, query::With, system::{Commands, Query, Res}
-    }, input::{keyboard::KeyCode, Input}, prelude::{App, Plugin, Update, Vec2, Vec3}, sprite::SpriteBundle, time::Time, transform::components::Transform, utils::default, window::{CursorMoved, Window}
+    }, input::{keyboard::KeyCode, Input}, prelude::{App, Plugin, Update, Vec2, Vec3}, sprite::SpriteBundle, time::Time, transform::components::Transform, utils::default, window::{CursorMoved, PrimaryWindow, Window}
 };
 
 pub struct PlayerControlsPlugin;
 
 impl Plugin for PlayerControlsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (control_player_movement, control_player_shooting));
+        app.add_systems(Update, (control_player_movement, control_player_shooting))
+        /* .add_event(cursor_events)*/;
     }
 }
 
@@ -83,7 +84,7 @@ fn control_player_shooting(
                     translation: Vec3 {
                         x: cursor_position.x,
                         y: cursor_position.y,
-                        z: 2.,
+                        z: bullet::Z_POS,
                     },
                     ..default()
                 },
@@ -95,8 +96,6 @@ fn control_player_shooting(
 }
 
 fn players_shoot(mut player_positions: &mut Query<(&mut Transform), With<Player>>) {}
-
-use bevy::window::PrimaryWindow;
 
 fn find_cursor_position(
     q_windows: Query<&Window, With<PrimaryWindow>>,

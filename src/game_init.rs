@@ -24,7 +24,7 @@ pub fn game_init(mut commands: Commands, asset_server: Res<AssetServer>) {
         SpriteBundle {
             texture: asset_server.load(player::ASSET_PATH),
             transform: Transform {
-                translation: Vec3::new(100., 100., 1.),
+                translation: Vec3::new(100., 100., player::Z_POS),
                 ..default()
             },
             ..default()

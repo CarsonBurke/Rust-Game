@@ -19,6 +19,7 @@ pub mod tiles {
 
 pub mod tile_grass {
     pub const ASSET_PATH: &str = "grass.png";
+    pub const Z_POS: f32 = 0.;
 }
 
 pub mod player {
@@ -27,11 +28,13 @@ pub mod player {
     pub const BOOST_SPEED: i32 = 220;
     pub const WIDTH: i32 = 98;
     pub const HEIGHT: i32 = 75;
+    pub const Z_POS: f32 = 1.;
 }
 
 pub mod bullet {
     pub const WIDTH: i32 = 9;
     pub const HEIGHT: i32 = 54;
+    pub const Z_POS: f32 = 2.;
 }
 
 pub mod bullet_player {
