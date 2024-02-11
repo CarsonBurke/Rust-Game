@@ -18,6 +18,7 @@ pub mod game;
 pub mod constants;
 pub mod tiles;
 pub mod cursor;
+pub mod utils;
 
 fn main() {
     /* let startup = GameStartup; */

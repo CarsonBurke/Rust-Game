@@ -1,8 +1,8 @@
-use crate::{structs::{Bullet, Player}, constants::{bullet, bullet_player, control_keys, player}};
+use crate::{constants::{bullet, bullet_player, control_keys, player}, structs::{Bullet, Player}, utils::Utils};
 use bevy::{
     app::Startup, asset::AssetServer, ecs::{
         event::EventReader, query::With, system::{Commands, Query, Res}
-    }, input::{keyboard::KeyCode, Input}, prelude::{App, Plugin, Update, Vec2, Vec3}, sprite::SpriteBundle, time::Time, transform::components::Transform, utils::default, window::{CursorMoved, PrimaryWindow, Window}
+    }, input::{keyboard::KeyCode, Input}, prelude::{App, Plugin, Update, Vec2, Vec3}, render::camera::Camera, sprite::SpriteBundle, time::Time, transform::components::{GlobalTransform, Transform}, utils::default, window::{CursorMoved, PrimaryWindow, Window}
 };
 
 pub struct PlayerControlsPlugin;
@@ -66,13 +66,19 @@ fn control_player_shooting(
     mut player_positions: Query<(&mut Transform, &mut Player), With<Player>>,
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    q_windows: Query<&Window, With<PrimaryWindow>>
+    cameras: Query<(&Camera, &GlobalTransform)>,
+    windows: Query<&Window, With<PrimaryWindow>>
 ) {
     if !input.pressed(control_keys::SHOOT) {
         return;
     }
 
-    let cursor_position = find_cursor_position(q_windows);
+    let cursor_pos = find_cursor_position(cameras, windows);
+    let player_tuple = player_positions.single();
+    let player_pos = player_tuple.0.translation;
+    
+    let angle = Utils::find_angle(cursor_pos.x, cursor_pos.y, player_pos.x, player_pos.y);
+    println!("angle {}", angle);
 
     // The player is shooting
 
@@ -82,8 +88,8 @@ fn control_player_shooting(
                 texture: asset_server.load(bullet_player::ASSET_PATH),
                 transform: Transform {
                     translation: Vec3 {
-                        x: cursor_position.x,
-                        y: cursor_position.y,
+                        x: cursor_pos.x,
+                        y: cursor_pos.y,
                         z: bullet::Z_POS,
                     },
                     ..default()
@@ -98,21 +104,28 @@ fn control_player_shooting(
 fn players_shoot(mut player_positions: &mut Query<(&mut Transform), With<Player>>) {}
 
 fn find_cursor_position(
-    q_windows: Query<&Window, With<PrimaryWindow>>,
+    cameras: Query<(&Camera, &GlobalTransform)>,
+    windows: Query<&Window, With<PrimaryWindow>>,
 ) -> Vec2 {
-    // Games typically only have one window (the primary window)
-    if let Some(position) = q_windows.single().cursor_position() {
-        
-        println!("Cursor is inside the primary window, at {:?}", position);
-        return position;
-    } else {
-        
-        println!("Cursor is not in the game window.");
+
+    let (camera, camera_transform) = cameras.single();
+
+    let Some(cursor_absolute_pos) = windows.single().cursor_position() else {
+        return Vec2 {
+            x: 0.,
+            y: 0.,
+        };
+    };
+
+    // Calculate a world position based on the cursor's position.
+    let Some(cursor_pos) = camera.viewport_to_world_2d(camera_transform, cursor_absolute_pos) else {
         return Vec2 {
             x: 0.,
             y: 0.,   
-        }
-    }
+        };
+    };
+
+    return cursor_pos
 }
 
 fn cursor_events(
