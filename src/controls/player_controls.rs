@@ -2,7 +2,7 @@ use crate::{constants::{bullet, bullet_player, control_keys, player}, structs::{
 use bevy::{
     app::Startup, asset::AssetServer, ecs::{
         event::EventReader, query::With, system::{Commands, Query, Res}
-    }, input::{keyboard::KeyCode, Input}, prelude::{App, Plugin, Update, Vec2, Vec3}, render::camera::Camera, sprite::SpriteBundle, time::Time, transform::components::{GlobalTransform, Transform}, utils::default, window::{CursorMoved, PrimaryWindow, Window}
+    }, input::{keyboard::KeyCode, Input}, math::Quat, prelude::{App, Plugin, Update, Vec2, Vec3}, render::camera::Camera, sprite::SpriteBundle, time::Time, transform::components::{GlobalTransform, Transform}, utils::default, window::{CursorMoved, PrimaryWindow, Window}
 };
 
 pub struct PlayerControlsPlugin;
@@ -76,9 +76,9 @@ fn control_player_shooting(
     let cursor_pos = find_cursor_position(cameras, windows);
     let player_tuple = player_positions.single();
     let player_pos = player_tuple.0.translation;
-    
-    let angle = Utils::find_angle(cursor_pos.x, cursor_pos.y, player_pos.x, player_pos.y);
-    println!("angle {}", angle);
+
+    let player_cursor_angle = Utils::find_angle(cursor_pos.x, cursor_pos.y, player_pos.x, player_pos.y);
+    println!("angle {}", player_cursor_angle);
 
     // The player is shooting
 
@@ -91,7 +91,9 @@ fn control_player_shooting(
                         x: cursor_pos.x,
                         y: cursor_pos.y,
                         z: bullet::Z_POS,
+                    
                     },
+                    rotation: Quat::from_axis_angle(Vec3::new(0., 0., 1.), -player_cursor_angle)/* Quat::from_rotation_z(player_cursor_angle) */,
                     ..default()
                 },
                 ..default()
