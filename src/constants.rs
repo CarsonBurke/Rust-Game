@@ -28,7 +28,7 @@ pub mod player {
     pub const BOOST_SPEED: i32 = 220;
     pub const WIDTH: i32 = 98;
     pub const HEIGHT: i32 = 75;
-    pub const Z_POS: f32 = 1.;
+    pub const Z_POS: f32 = 1000.;
 }
 
 pub mod bullet {
@@ -39,4 +39,9 @@ pub mod bullet {
 
 pub mod bullet_player {
     pub const ASSET_PATH: &str = "player_laser.png";
+}
+
+pub mod window {
+    pub const ASSET_PATH: &str = "assets/player.png";
+    pub const PRIMARY_WINDOW_TITLE: &str = "Learning Bevy Game";
 }

@@ -1,4 +1,6 @@
-use crate::{constants::{bullet, bullet_player, control_keys, player}, structs::{Bullet, Player}, utils::Utils};
+use std::f32::consts::PI;
+
+use crate::{constants::{bullet, bullet_player, control_keys, player}, cursor, structs::{Bullet, Player}, utils::Utils};
 use bevy::{
     app::Startup, asset::AssetServer, ecs::{
         event::EventReader, query::With, system::{Commands, Query, Res}
@@ -73,12 +75,43 @@ fn control_player_shooting(
         return;
     }
 
-    let cursor_pos = find_cursor_position(cameras, windows);
+/*     let cursor_pos = find_cursor_position(cameras, windows);
     let player_tuple = player_positions.single();
-    let player_pos = player_tuple.0.translation;
+    let player_pos = player_tuple.0.translation.truncate(); */
+/* 
+    let player_cursor_angle = Utils::find_angle(cursor_pos.x, cursor_pos.y, player_pos.x, player_pos.y) + (PI/2.);
+    println!("angle: {}, w: {}, z: {}", player_cursor_angle, Quat::from_axis_angle(Vec3::new(0., 0., 1.), player_cursor_angle).w, Quat::from_axis_angle(Vec3::new(0., 0., 1.), player_cursor_angle).z);
+ */
+/*     let player_test_pos = player_tuple.0.local_y().truncate();
+    let test = player_test_pos.angle_between(cursor_pos - player_test_pos);
+    println!("alt angle: {}", test); */
 
-    let player_cursor_angle = Utils::find_angle(cursor_pos.x, cursor_pos.y, player_pos.x, player_pos.y);
-    println!("angle {}", player_cursor_angle);
+    // Considering all these tags to have one unique entity each
+
+    let (camera, camera_transform) = cameras.single();
+    let window = windows.single();
+
+    // Extract cursor position if it is inside window
+    let Some(cursor_pos) = window 
+        .cursor_position()
+        .and_then(|cursor| camera.viewport_to_world_2d(camera_transform, cursor))
+    else {
+        return
+    };
+
+    let player_transform = player_positions.single().0;
+    // In 2d up is positive y, so current forward direction for the player
+    // is local_y unit vector
+    let player_dir = player_transform.local_y().truncate();
+
+    // Direction to cursor (what we want local_y to become) is simply the
+    // difference of target position and player position
+    let cursor_dir = cursor_pos - player_transform.translation.truncate();
+    
+    // Then we find the angle between current forward direction and desired one
+    let angle = player_dir.angle_between(cursor_dir);
+    let rotation = Quat::from_rotation_z(angle);
+    println!("angle {}, x {}, y {}, z {}, w {}", angle, rotation.x, rotation.y, rotation.z, rotation.w);
 
     // The player is shooting
 
@@ -91,9 +124,8 @@ fn control_player_shooting(
                         x: cursor_pos.x,
                         y: cursor_pos.y,
                         z: bullet::Z_POS,
-                    
                     },
-                    rotation: Quat::from_axis_angle(Vec3::new(0., 0., 1.), -player_cursor_angle)/* Quat::from_rotation_z(player_cursor_angle) */,
+                    rotation: /* Quat::from_axis_angle(Vec3::new(0., 0., 1.), player_cursor_angle) */Quat::from_rotation_z(angle),
                     ..default()
                 },
                 ..default()
@@ -101,6 +133,27 @@ fn control_player_shooting(
             Bullet, 
         ));
     }
+
+/*     // The player is shooting
+
+    for (mut transform, player) in &mut player_positions {
+        commands.spawn((
+            SpriteBundle {
+                texture: asset_server.load(bullet_player::ASSET_PATH),
+                transform: Transform {
+                    translation: Vec3 {
+                        x: cursor_pos.x,
+                        y: cursor_pos.y,
+                        z: bullet::Z_POS,
+                    },
+                    rotation: /* Quat::from_axis_angle(Vec3::new(0., 0., 1.), player_cursor_angle) */Quat::from_rotation_z(test),
+                    ..default()
+                },
+                ..default()
+            },
+            Bullet, 
+        ));
+    } */
 }
 
 fn players_shoot(mut player_positions: &mut Query<(&mut Transform), With<Player>>) {}

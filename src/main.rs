@@ -6,6 +6,7 @@ use bevy::{
     window::{WindowPlugin, WindowTheme, Window},
     DefaultPlugins,
 };
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use game::GamePlugin;
 use structs::Position;
 
@@ -25,5 +26,6 @@ fn main() {
 
     App::new()
         .add_plugins((DefaultPlugins, GamePlugin))
+        //.add_plugins(WorldInspectorPlugin::new())
         .run();
 }
