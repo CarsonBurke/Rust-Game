@@ -5,12 +5,11 @@ use crate::{
 use bevy::{
     asset::AssetServer,
     ecs::{
-        query::{With, Without},
-        system::{Commands, Query, Res},
+        event::EventReader, query::{With, Without}, system::{Commands, Query, Res}
     },
-    input::{keyboard::KeyCode, Input},
+    input::{keyboard::KeyCode, mouse::MouseWheel, Input},
     prelude::{App, Plugin, Update},
-    render::camera::Camera,
+    render::camera::{Camera, OrthographicProjection},
     sprite::SpriteBundle,
     time::Time,
     transform::components::{GlobalTransform, Transform},
@@ -21,7 +20,7 @@ pub struct CameraControlsPlugin;
 
 impl Plugin for CameraControlsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (control_camera_viewport));
+        app.add_systems(Update, (control_camera_viewport, control_camera_zoom));
     }
 }
 
@@ -43,4 +42,14 @@ fn control_camera_viewport(
     };
 
     camera_transform.0.translation = player_transform.0.translation.clone();
+}
+
+fn control_camera_zoom(mut cameras: Query<&mut OrthographicProjection, With<Camera>>, time: Res<Time>, mut scroll_event_reader: EventReader<MouseWheel>) {
+    let mut projection = cameras.single_mut();
+
+    for event in scroll_event_reader.read() {
+        let projection_delta = event.y;
+
+        projection.scale -= projection_delta * time.delta_seconds();
+    }
 }
