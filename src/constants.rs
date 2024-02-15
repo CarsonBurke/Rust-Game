@@ -45,6 +45,7 @@ pub mod bullet {
     pub const WIDTH: i32 = 9;
     pub const HEIGHT: i32 = 54;
     pub const Z_POS: f32 = 2.;
+    pub const SPEED: f32 = 500.;
 }
 
 pub mod bullet_player {

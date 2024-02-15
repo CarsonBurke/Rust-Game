@@ -2,7 +2,7 @@ use std::f32::consts::PI;
 
 use bevy::{app::{App, Plugin, Update}, ecs::{query::With, system::{Query, Res}}, math::Vec3, time::Time, transform::components::Transform};
 
-use crate::structs::{Player, Bullet};
+use crate::{constants::bullet, structs::{Bullet, Player}};
 
 pub struct BulletPlugin;
 
@@ -13,8 +13,6 @@ impl Plugin for BulletPlugin {
 }
 
 fn move_bullets(time: Res<Time>, mut bullet_positions: Query<(&mut Transform), With<Bullet>>) {
-
-    let speed: f32 = 300.;
 
     for (mut transform) in &mut bullet_positions {
         
@@ -30,7 +28,7 @@ fn move_bullets(time: Res<Time>, mut bullet_positions: Query<(&mut Transform), W
         transform.translation.y += y_diff * time.delta_seconds(); */
 
         let direction = transform.rotation * Vec3::Y;
-        let translation_delta = direction * speed * time.delta_seconds();
+        let translation_delta = direction * bullet::SPEED * time.delta_seconds();
 
         transform.translation += translation_delta;
         /* println!("z: {}, w: {}", transform.rotation.z * PI, transform.rotation.w * PI); */

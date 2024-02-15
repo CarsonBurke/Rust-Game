@@ -159,14 +159,14 @@ fn control_player_shooting(
 
     // The player is shooting
 
-    for (mut transform, player) in &mut player_positions {
+    for (mut transform, player) in &player_positions {
         commands.spawn((
             SpriteBundle {
                 texture: asset_server.load(bullet_player::ASSET_PATH),
                 transform: Transform {
                     translation: Vec3 {
-                        x: cursor_pos.x,
-                        y: cursor_pos.y,
+                        x: player_transform.translation.x,
+                        y: player_transform.translation.y,
                         z: bullet::Z_POS,
                     },
                     rotation,
