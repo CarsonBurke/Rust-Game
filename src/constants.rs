@@ -24,11 +24,21 @@ pub mod tile_grass {
 
 pub mod player {
     pub const ASSET_PATH: &str = "player.png";
-    pub const SPEED: i32 = 150;
-    pub const BOOST_SPEED: i32 = 220;
+    pub const SPEED: f32 = 150.;
+    pub const BOOST_SPEED: f32 = 220.;
     pub const WIDTH: i32 = 98;
     pub const HEIGHT: i32 = 75;
     pub const Z_POS: f32 = 1000.;
+}
+
+pub mod alien_unit {
+
+}
+
+pub mod alien_scout {
+    pub const ASSET_PATH: &str = "player.png";
+    pub const Z_POS: f32 = 1000.;
+    pub const SPEED: f32 = 100.;
 }
 
 pub mod bullet {

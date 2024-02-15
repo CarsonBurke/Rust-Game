@@ -12,12 +12,12 @@ pub struct Alien {}
 
 #[derive(Component)]
 pub struct AlienUnit {
-    pub health: f32,
+    
 }
 
 #[derive(Component)]
 pub struct AlienScout {
-    
+    pub health: f32,
 }
 
 #[derive(Component)]
