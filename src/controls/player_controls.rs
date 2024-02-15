@@ -82,10 +82,14 @@ fn apply_player_translation(translation: Vec2, player_tuple: (Mut<'_, Transform>
     let translation_direction = translation + player_transform.translation.truncate();
 
     //let angle; 
+    let to_translation = translation + player_transform.translation.truncate();
 
-    let angle = player_direction.angle_between(translation_direction);
-    println!("Change player angle to: {}" , angle);
-    player_transform.rotation = Quat::from_rotation_z(angle);
+    /* let angle = player_direction.angle_between(translation_direction); */
+    /* let rotation = Quat::from_rotation_arc(Vec3::Y, to_translation.extend(0.)); */
+    let angle = /* to_translation.angle_between(player_transform.translation.truncate()) */Utils::find_angle(to_translation.x, to_translation.y, player_transform.translation.x, player_transform.translation.y);
+    let rotation = Quat::from_rotation_z(angle);
+    println!("Change player angle {}, rotation {}" , angle, rotation);
+    player_transform.rotation = rotation;
 
     player_transform.translation.x += translation.x;
     player_transform.translation.y += translation.y;
