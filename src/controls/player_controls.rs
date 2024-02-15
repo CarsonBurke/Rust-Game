@@ -86,7 +86,7 @@ fn apply_player_translation(translation: Vec2, player_tuple: (Mut<'_, Transform>
 
     /* let angle = player_direction.angle_between(translation_direction); */
     /* let rotation = Quat::from_rotation_arc(Vec3::Y, to_translation.extend(0.)); */
-    let angle = /* to_translation.angle_between(player_transform.translation.truncate()) */Utils::find_angle(to_translation.x, to_translation.y, player_transform.translation.x, player_transform.translation.y) + PI/2.;
+    let angle = /* player_transform.local_y().truncate().angle_between(translation * player_transform.translation.truncate()) */Utils::find_angle( to_translation.x, to_translation.y, player_transform.translation.x, player_transform.translation.y) + PI/2.;
     let rotation = Quat::from_rotation_z(angle);
     println!("Change player angle {}, rotation {}" , angle, rotation);
     player_transform.rotation = rotation;
@@ -144,16 +144,16 @@ fn control_player_shooting(
     };
 
     let player_transform = player_positions.single().0;
-    // In 2d up is positive y, so current forward direction for the player
+/*     // In 2d up is positive y, so current forward direction for the player
     // is local_y unit vector
     let player_dir = player_transform.local_y().truncate();
 
     // Direction to cursor (what we want local_y to become) is simply the
     // difference of target position and player position
     let cursor_dir = cursor_pos - player_transform.translation.truncate();
-    
+     */
     // Then we find the angle between current forward direction and desired one
-    let angle = player_dir.angle_between(cursor_dir);
+    let angle = Utils::find_angle(player_transform.translation.x, player_transform.translation.y, cursor_pos.x, cursor_pos.y) - PI/2./* player_dir.angle_between(cursor_dir) */;
     let rotation = Quat::from_rotation_z(angle);
     // println!("angle {}, x {}, y {}, z {}, w {}", angle, rotation.x, rotation.y, rotation.z, rotation.w);
 

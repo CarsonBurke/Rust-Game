@@ -2,7 +2,7 @@ use bevy::{app::{App, Plugin, Update}, ecs::{system::{Res, Query}, query::With},
 
 use crate::{structs::Player, controls::PlayerControlsPlugin};
 
-use super::camera_controller::CameraControlsPlugin;
+use super::camera_controls::CameraControlsPlugin;
 
 pub struct ControlsPlugin;
 
