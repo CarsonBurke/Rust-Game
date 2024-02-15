@@ -1,10 +1,10 @@
 use std::f32::consts::PI;
 
-use crate::{constants::{bullet, bullet_player, control_keys, player}, cursor, structs::{Bullet, Player}, utils::Utils};
+use crate::{constants::{bullet, bullet_player, control_keys, player, ResultCode}, cursor, structs::{Bullet, Player}, utils::Utils};
 use bevy::{
     app::Startup, asset::AssetServer, ecs::{
         event::EventReader, query::With, system::{Commands, Query, Res}
-    }, input::{keyboard::KeyCode, Input}, math::Quat, prelude::{App, Plugin, Update, Vec2, Vec3}, render::camera::Camera, sprite::SpriteBundle, time::Time, transform::components::{GlobalTransform, Transform}, utils::default, window::{CursorMoved, PrimaryWindow, Window}
+    }, input::{keyboard::KeyCode, Input}, math::Quat, prelude::{App, Plugin, Update, Vec2, Vec3, Mut}, render::camera::Camera, sprite::SpriteBundle, time::Time, transform::components::{GlobalTransform, Transform}, utils::default, window::{CursorMoved, PrimaryWindow, Window}
 };
 
 pub struct PlayerControlsPlugin;
@@ -19,26 +19,51 @@ impl Plugin for PlayerControlsPlugin {
 fn control_player_movement(
     input: Res<Input<KeyCode>>,
     time: Res<Time>,
-    mut player_positions: Query<(&mut Transform, &mut Player), With<Player>>,
+    mut players: Query<(&mut Transform, &mut Player), With<Player>>,
 ) {
 
-    let speed = find_speed(&input);
+    let player_tuple = players.single_mut();
+    
+    let translation = find_player_translation(&input, &time);
+    let Ok(translation) = translation else {
+        return
+    };
+    
+    apply_player_translation(translation, player_tuple);
+}
+
+fn find_player_translation(input: &Res<Input<KeyCode>>, time: &Res<Time<>>) -> Result<Vec2, ResultCode> {
+
+    let speed = find_speed(input);
+    let mut translation = Vec2::new(0., 0.);
+
+    // Replace this with a match expression later
 
     if input.pressed(control_keys::MOVE_UP) {
-        move_players(&mut player_positions, &time, 0., speed);
+        translation.y += speed;
     }
 
     if input.pressed(control_keys::MOVE_DOWN) {
-        move_players(&mut player_positions, &time, 0., -speed);
+        translation.y -= speed;
     }
 
     if input.pressed(control_keys::MOVE_LEFT) {
-        move_players(&mut player_positions, &time, -speed, 0.);
+        translation.x -= speed;
     }
 
     if input.pressed(control_keys::MOVE_RIGHT) {
-        move_players(&mut player_positions, &time, speed, 0.);
+        translation.x += speed;
     }
+
+    if translation.x == 0. && translation.y == 0. {
+        return Err(ResultCode::NoAction)
+    };
+
+    let delta_seconds = time.delta_seconds();
+    translation.x *= delta_seconds;
+    translation.y *= delta_seconds;
+
+    return Ok(translation)
 }
 
 fn find_speed(input: &Res<Input<KeyCode>>) -> f32 {
@@ -49,6 +74,21 @@ fn find_speed(input: &Res<Input<KeyCode>>) -> f32 {
     // Otherwise we aren't boosting
 
     return player::SPEED as f32
+}
+
+fn apply_player_translation(translation: Vec2, player_tuple: (Mut<'_, Transform>, Mut<'_, Player>)) {
+    let mut player_transform = player_tuple.0;
+    let player_direction = player_transform.local_y().truncate();
+    let translation_direction = translation + player_transform.translation.truncate();
+
+    //let angle; 
+
+    let angle = player_direction.angle_between(translation_direction);
+    println!("Change player angle to: {}" , angle);
+    player_transform.rotation = Quat::from_rotation_z(angle);
+
+    player_transform.translation.x += translation.x;
+    player_transform.translation.y += translation.y;
 }
 
 fn move_players(
@@ -111,7 +151,7 @@ fn control_player_shooting(
     // Then we find the angle between current forward direction and desired one
     let angle = player_dir.angle_between(cursor_dir);
     let rotation = Quat::from_rotation_z(angle);
-    println!("angle {}, x {}, y {}, z {}, w {}", angle, rotation.x, rotation.y, rotation.z, rotation.w);
+    // println!("angle {}, x {}, y {}, z {}, w {}", angle, rotation.x, rotation.y, rotation.z, rotation.w);
 
     // The player is shooting
 
@@ -125,7 +165,7 @@ fn control_player_shooting(
                         y: cursor_pos.y,
                         z: bullet::Z_POS,
                     },
-                    rotation: /* Quat::from_axis_angle(Vec3::new(0., 0., 1.), player_cursor_angle) */Quat::from_rotation_z(angle),
+                    rotation,
                     ..default()
                 },
                 ..default()

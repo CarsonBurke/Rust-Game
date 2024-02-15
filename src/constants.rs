@@ -45,3 +45,9 @@ pub mod window {
     pub const ASSET_PATH: &str = "assets/player.png";
     pub const PRIMARY_WINDOW_TITLE: &str = "Learning Bevy Game";
 }
+
+pub enum ResultCode {
+    Success,
+    Failure,
+    NoAction,
+}
