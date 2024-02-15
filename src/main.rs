@@ -8,7 +8,6 @@ use bevy::{
 };
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use game::GamePlugin;
-use structs::Position;
 
 pub mod structs;
 pub mod game_init;

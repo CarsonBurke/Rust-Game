@@ -1,22 +1,23 @@
 use bevy::prelude::Component;
 
 #[derive(Component)]
-pub struct Position {
-    pub x: f32,
-    pub y: f32,
-}
-
-#[derive(Component)]
-pub struct Person;
-
-#[derive(Component)]
-pub struct Name(pub String);
-
-#[derive(Component)]
 pub struct Player {
     pub health: f32,
     pub acceleration_x: f32,
     pub acceleration_y: f32,
+}
+
+#[derive(Component)]
+pub struct Alien {}
+
+#[derive(Component)]
+pub struct AlienUnit {
+    pub health: f32,
+}
+
+#[derive(Component)]
+pub struct AlienScout {
+    
 }
 
 #[derive(Component)]
