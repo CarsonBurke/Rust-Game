@@ -12,7 +12,6 @@ use structs::Position;
 
 pub mod structs;
 pub mod game_init;
-pub mod players;
 pub mod controls;
 pub mod bullets;
 pub mod game;
@@ -20,6 +19,8 @@ pub mod constants;
 pub mod tiles;
 pub mod cursor;
 pub mod utils;
+pub mod buildings;
+pub mod units;
 
 fn main() {
     /* let startup = GameStartup; */

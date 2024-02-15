@@ -53,3 +53,7 @@ fn control_camera_zoom(mut cameras: Query<&mut OrthographicProjection, With<Came
         projection.scale -= projection_delta * time.delta_seconds();
     }
 }
+
+fn camera_shake(mut cameras: Query<&mut OrthographicProjection, With<Camera>>, time: Res<Time>) {
+    
+}

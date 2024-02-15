@@ -24,3 +24,12 @@ pub struct Bullet;
 
 #[derive(Component)]
 pub struct Tile;
+
+#[derive(Component)]
+pub struct CameraShake {
+    strength: f32,
+    /**
+     * How many ticks until the screen shake will stop
+     */
+    remaining_ticks: i32,
+}
