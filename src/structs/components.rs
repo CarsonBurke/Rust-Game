@@ -1,10 +1,13 @@
 use bevy::prelude::Component;
 
+use super::Gun;
+
 #[derive(Component)]
 pub struct Player {
     pub health: f32,
     pub acceleration_x: f32,
     pub acceleration_y: f32,
+    pub guns: Vec<Gun>,
 }
 
 #[derive(Component)]
@@ -21,7 +24,11 @@ pub struct AlienScout {
 }
 
 #[derive(Component)]
-pub struct Bullet;
+pub struct Bullet {
+    pub time_created: f32,
+    pub speed: f32,
+    pub range: f32,
+}
 
 #[derive(Component)]
 pub struct Tile;

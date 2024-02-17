@@ -23,6 +23,8 @@ pub mod tile_grass {
 }
 
 pub mod player {
+    use crate::structs::Gun;
+
     pub const ASSET_PATH: &str = "player.png";
     pub const SPEED: f32 = 150.;
     pub const BOOST_SPEED: f32 = 220.;
@@ -31,9 +33,7 @@ pub mod player {
     pub const Z_POS: f32 = 1000.;
 }
 
-pub mod alien_unit {
-
-}
+pub mod alien_unit {}
 
 pub mod alien_scout {
     pub const ASSET_PATH: &str = "player.png";
@@ -42,13 +42,14 @@ pub mod alien_scout {
 }
 
 pub mod bullet {
+    use crate::structs::Gun;
+
     pub const WIDTH: i32 = 9;
     pub const HEIGHT: i32 = 54;
     pub const Z_POS: f32 = 2.;
-    pub const SPEED: f32 = 500.;
 }
 
-pub mod bullet_player {
+pub mod basic_bullet {
     pub const ASSET_PATH: &str = "player_laser.png";
 }
 
