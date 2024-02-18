@@ -1,7 +1,7 @@
 use std::f32::consts::PI;
 
 use crate::{
-    constants::{basic_bullet, bullet, control_keys, player, ResultCode},
+    constants::{bullet, control_keys, player, ResultCode},
     cursor,
     structs::{Bullet, Player},
     utils::Utils,
@@ -95,7 +95,7 @@ fn find_speed(input: &Res<Input<KeyCode>>) -> f32 {
 
 fn apply_player_translation(
     translation: Vec2,
-    player_tuple: (Mut<'_, Transform>, Mut<'_, Player>),
+    player_tuple: (Mut<Transform>, Mut<Player>),
 ) {
     let mut player_transform = player_tuple.0;
     let player_direction = player_transform.local_y().truncate();
@@ -140,17 +140,6 @@ fn control_player_shooting(
         return;
     }
 
-    /*     let cursor_pos = find_cursor_position(cameras, windows);
-    let player_tuple = player_positions.single();
-    let player_pos = player_tuple.0.translation.truncate(); */
-    /*
-       let player_cursor_angle = Utils::find_angle(cursor_pos.x, cursor_pos.y, player_pos.x, player_pos.y) + (PI/2.);
-       println!("angle: {}, w: {}, z: {}", player_cursor_angle, Quat::from_axis_angle(Vec3::new(0., 0., 1.), player_cursor_angle).w, Quat::from_axis_angle(Vec3::new(0., 0., 1.), player_cursor_angle).z);
-    */
-    /*     let player_test_pos = player_tuple.0.local_y().truncate();
-    let test = player_test_pos.angle_between(cursor_pos - player_test_pos);
-    println!("alt angle: {}", test); */
-
     // Considering all these tags to have one unique entity each
 
     let (camera, camera_transform) = cameras.single();
@@ -187,7 +176,7 @@ fn control_player_shooting(
 
         commands.spawn((
             SpriteBundle {
-                texture: asset_server.load(basic_bullet::ASSET_PATH),
+                texture: asset_server.load(player.guns[0].asset_path.clone()),
                 transform: Transform {
                     translation: Vec3 {
                         x: player_transform.translation.x,

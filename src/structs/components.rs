@@ -21,6 +21,12 @@ pub struct AlienUnit {
 #[derive(Component)]
 pub struct AlienScout {
     pub health: f32,
+    pub guns: Vec<Gun>,
+}
+
+#[derive(Component)]
+pub struct Unit {
+    pub guns: Vec<Gun>,
 }
 
 #[derive(Component)]

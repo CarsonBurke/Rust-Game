@@ -1,8 +1,22 @@
-use bevy::{
-    animation::prelude, asset::{AssetServer, Handle}, core_pipeline::core_2d::Camera2dBundle, ecs::system::{Commands, NonSend, Query, Res, ResMut}, math::Vec3, render::{texture::Image, view::WindowSurfaces}, sprite::SpriteBundle, time::Time, transform::components::Transform, utils::default, window::Window, winit::{self, WinitWindows}
+use crate::{
+    constants::{player, window},
+    structs::{Gun, Player},
 };
 use ::winit::window::Icon;
-use crate::{constants::{player, window}, structs::{Gun, Player}};
+use bevy::{
+    animation::prelude,
+    asset::{AssetServer, Handle},
+    core_pipeline::core_2d::Camera2dBundle,
+    ecs::system::{Commands, NonSend, Query, Res, ResMut},
+    math::Vec3,
+    render::{texture::Image, view::WindowSurfaces},
+    sprite::SpriteBundle,
+    time::Time,
+    transform::components::Transform,
+    utils::default,
+    window::Window,
+    winit::{self, WinitWindows},
+};
 
 pub struct GameInit;
 
@@ -11,7 +25,12 @@ struct GameTextures {
     player: Handle<Image>,
 }
 
-pub fn game_init(mut commands: Commands, asset_server: Res<AssetServer>, windows: NonSend<WinitWindows>, time: Res<Time>) {
+pub fn game_init(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    windows: NonSend<WinitWindows>,
+    time: Res<Time>,
+) {
     commands.spawn(Camera2dBundle::default());
     commands.spawn((
         SpriteBundle {
@@ -26,7 +45,13 @@ pub fn game_init(mut commands: Commands, asset_server: Res<AssetServer>, windows
             health: 100.,
             acceleration_x: 0.,
             acceleration_y: 0.,
-            guns: vec![Gun { range: 600., speed: 600., fire_rate: 5., last_shot: 0., }]
+            guns: vec![Gun {
+                range: 600.,
+                speed: 600.,
+                fire_rate: 5.,
+                last_shot: 0.,
+                asset_path: String::from("player_laser.png"),
+            }],
         },
     ));
 

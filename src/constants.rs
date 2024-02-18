@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 pub mod map {
     pub const DIMENSIONS: i64 = 10000;
 }
@@ -23,8 +25,6 @@ pub mod tile_grass {
 }
 
 pub mod player {
-    use crate::structs::Gun;
-
     pub const ASSET_PATH: &str = "player.png";
     pub const SPEED: f32 = 150.;
     pub const BOOST_SPEED: f32 = 220.;
@@ -36,21 +36,15 @@ pub mod player {
 pub mod alien_unit {}
 
 pub mod alien_scout {
-    pub const ASSET_PATH: &str = "player.png";
+    pub const ASSET_PATH: &str = "alien_scout.png";
     pub const Z_POS: f32 = 1000.;
     pub const SPEED: f32 = 100.;
 }
 
 pub mod bullet {
-    use crate::structs::Gun;
-
     pub const WIDTH: i32 = 9;
     pub const HEIGHT: i32 = 54;
     pub const Z_POS: f32 = 2.;
-}
-
-pub mod basic_bullet {
-    pub const ASSET_PATH: &str = "player_laser.png";
 }
 
 pub mod window {

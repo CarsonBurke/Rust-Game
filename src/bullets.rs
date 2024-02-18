@@ -45,15 +45,6 @@ fn delete_old_bullets(
 fn move_bullets(time: Res<Time>, mut bullets: Query<(&mut Transform, &mut Bullet), With<Bullet>>) {
     for (mut transform, bullet) in &mut bullets {
         let angle = transform.rotation.w;
-        /*         let x_diff = (speed * (angle.abs()).cos())/* .abs() */;
-        let y_diff = (speed * (angle.abs()).sin())/* .abs() */; */
-        /*         let x_diff = speed * (angle).cos()/* .abs() */;
-        let y_diff = speed * (angle).sin()/* .abs() */; */
-        /*         let x_diff = transform.rotation.w * speed;
-        let y_diff = -transform.rotation.z * speed;
-
-        transform.translation.x += x_diff * time.delta_seconds();
-        transform.translation.y += y_diff * time.delta_seconds(); */
 
         let direction = transform.rotation * Vec3::Y;
         let translation_delta = direction * bullet.speed * time.delta_seconds();
