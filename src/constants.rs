@@ -57,3 +57,17 @@ pub enum ResultCode {
     Failure,
     NoAction,
 }
+
+pub enum ResourceType {
+    Energy,
+}
+
+pub mod scout_factory {
+    use super::ResourceType;
+
+    pub const ASSET_PATH: &str = "scout_factory.png";
+    pub const PRODUCTION_COST: [ResourceType; 1] = [ResourceType::Energy];
+    pub const PRODUCTION_TIME: f32 = 3.;
+    pub const Z_POS: f32 = 3.;
+    // pub const unit
+}

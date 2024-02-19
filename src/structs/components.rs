@@ -47,3 +47,13 @@ pub struct CameraShake {
      */
     remaining_ticks: i32,
 }
+
+#[derive(Component)]
+pub struct UnitFactory {
+    pub last_produced: f32,
+}
+
+#[derive(Component)]
+pub struct ScoutFactory {
+
+}
