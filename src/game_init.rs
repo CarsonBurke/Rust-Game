@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use crate::{
     constants::{player, window},
     structs::{Gun, Player},
@@ -32,28 +34,6 @@ pub fn game_init(
     time: Res<Time>,
 ) {
     commands.spawn(Camera2dBundle::default());
-    commands.spawn((
-        SpriteBundle {
-            texture: asset_server.load(player::ASSET_PATH),
-            transform: Transform {
-                translation: Vec3::new(100., 100., player::Z_POS),
-                ..default()
-            },
-            ..default()
-        },
-        Player {
-            health: 100.,
-            acceleration_x: 0.,
-            acceleration_y: 0.,
-            guns: vec![Gun {
-                range: 600.,
-                speed: 600.,
-                fire_rate: 5.,
-                last_shot: 0.,
-                asset_path: String::from("player_laser.png"),
-            }],
-        },
-    ));
 
     // here we use the `image` crate to load our icon data from a png file
     // this is not a very bevy-native solution, but it will do

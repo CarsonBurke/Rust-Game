@@ -48,7 +48,7 @@ fn control_camera_zoom(mut cameras: Query<&mut OrthographicProjection, With<Came
     let mut projection = cameras.single_mut();
 
     for event in scroll_event_reader.read() {
-        let projection_delta = event.y;
+        let projection_delta = event.y * 3.;
 
         projection.scale -= projection_delta * time.delta_seconds();
     }

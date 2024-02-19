@@ -6,7 +6,7 @@ pub struct Utils;
 
 impl Utils {
     pub fn range(x1: f32, y1: f32, x2: f32, y2: f32) -> f32 {
-        return 0.1;
+        return ((x1 - x2).abs()).max((y1 - y2).abs());
     }
 
     pub fn find_angle(x1: f32, y1: f32, x2: f32, y2: f32) -> f32 {

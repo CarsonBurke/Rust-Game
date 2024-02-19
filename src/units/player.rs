@@ -3,14 +3,17 @@ use std::f32::consts::PI;
 use crate::{
     constants::{bullet, control_keys, player, ResultCode},
     cursor,
-    structs::{Bullet, Player},
+    structs::{Bullet, Gun, Player},
     utils::Utils,
 };
 use bevy::{
     app::Startup,
     asset::AssetServer,
     ecs::{
-        event::EventReader, query::With, schedule::IntoSystemConfigs, system::{Commands, Query, Res}
+        event::EventReader,
+        query::With,
+        schedule::IntoSystemConfigs,
+        system::{Commands, Query, Res},
     },
     input::{keyboard::KeyCode, Input},
     math::Quat,
@@ -23,12 +26,43 @@ use bevy::{
     window::{CursorMoved, PrimaryWindow, Window},
 };
 
+use super::try_fire_all_guns;
+
 pub struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (control_player_movement, control_player_shooting).chain());
+        app.add_systems(Startup, spawn_player).add_systems(
+            Update,
+            (control_player_movement, control_player_shooting).chain(),
+        );
     }
+}
+
+fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn((
+        SpriteBundle {
+            texture: asset_server.load(player::ASSET_PATH),
+            transform: Transform {
+                translation: Vec3::new(100., 100., player::Z_POS),
+                ..default()
+            },
+            ..default()
+        },
+        Player {
+            health: 100.,
+            acceleration_x: 0.,
+            acceleration_y: 0.,
+            guns: vec![Gun {
+                range: 600.,
+                speed: 600.,
+                fire_rate: 5.,
+                last_shot: 0.,
+                asset_path: String::from("player_laser.png"),
+                arc: PI / 16.,
+            }],
+        },
+    ));
 }
 
 fn control_player_movement(
@@ -90,10 +124,7 @@ fn find_speed(input: &Res<Input<KeyCode>>) -> f32 {
     return player::SPEED as f32;
 }
 
-fn apply_player_translation(
-    translation: Vec2,
-    player_tuple: (Mut<Transform>, Mut<Player>),
-) {
+fn apply_player_translation(translation: Vec2, player_tuple: (Mut<Transform>, Mut<Player>)) {
     let mut player_transform = player_tuple.0;
     let player_direction = player_transform.local_y().truncate();
     let translation_direction = translation + player_transform.translation.truncate();
@@ -155,6 +186,14 @@ fn control_player_shooting(
     // The player is shooting
 
     for (mut player_transform, mut player) in &mut players {
+        try_fire_all_guns(
+            &mut player.guns,
+            &mut player_transform,
+            &cursor_pos,
+            &time,
+            &mut commands,
+            &asset_server,
+        );
 
         // Then we find the angle between current forward direction and desired one
         let angle = Utils::find_angle(player_transform.translation.x, player_transform.translation.y, cursor_pos.x, cursor_pos.y) - PI/2./* player_dir.angle_between(cursor_dir) */;
@@ -194,28 +233,6 @@ fn control_player_shooting(
 
         player.guns[0].last_shot = time.elapsed_seconds();
     }
-
-    /*
-    // The player is shooting
-
-    for (mut transform, player) in &mut player_positions {
-        commands.spawn((
-            SpriteBundle {
-                texture: asset_server.load(bullet_player::ASSET_PATH),
-                transform: Transform {
-                    translation: Vec3 {
-                        x: cursor_pos.x,
-                        y: cursor_pos.y,
-                        z: bullet::Z_POS,
-                    },
-                    rotation: /* Quat::from_axis_angle(Vec3::new(0., 0., 1.), player_cursor_angle) */Quat::from_rotation_z(test),
-                    ..default()
-                },
-                ..default()
-            },
-            Bullet,
-        ));
-    } */
 }
 
 fn players_shoot(mut player_positions: &mut Query<(&mut Transform), With<Player>>) {}

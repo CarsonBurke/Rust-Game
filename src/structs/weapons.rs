@@ -15,4 +15,6 @@ pub struct Gun {
     pub asset_path: String,
     // pub rotation_speed: f32,
     // pub rotation: f32,
+    /// the arc, in radians, that the bullet spawned may be in between
+    pub arc: f32,
 }

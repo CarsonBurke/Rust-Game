@@ -1,6 +1,20 @@
-use bevy::{app::{App, Plugin, Update}, asset::AssetServer, ecs::system::{Commands, Query, Res}, math::Vec3, sprite::SpriteBundle, time::Time, transform::components::Transform, utils::default};
+use std::f32::consts::PI;
 
-use crate::{constants::{alien_scout, scout_factory}, structs::{AlienScout, Gun, ScoutFactory, UnitFactory}};
+use bevy::{
+    app::{App, Plugin, Update},
+    asset::AssetServer,
+    ecs::system::{Commands, Query, Res},
+    math::Vec3,
+    sprite::SpriteBundle,
+    time::Time,
+    transform::components::Transform,
+    utils::default,
+};
+
+use crate::{
+    constants::{alien_scout, scout_factory},
+    structs::{AlienScout, Gun, ScoutFactory, UnitFactory},
+};
 
 use super::unit_factory;
 
@@ -12,9 +26,13 @@ impl Plugin for ScoutFactoryPlugin {
     }
 }
 
-fn create_unit(time: Res<Time>, mut scout_factories: Query<(&mut ScoutFactory, &mut UnitFactory, &mut Transform)>, mut commands: Commands, asset_server: Res<AssetServer>) {
+fn create_unit(
+    time: Res<Time>,
+    mut scout_factories: Query<(&mut ScoutFactory, &mut UnitFactory, &mut Transform)>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
     for (scout_factory, mut factory, factory_transform) in &mut scout_factories {
-
         let production_interval = scout_factory::PRODUCTION_TIME;
         let time_since_last_produced = time.elapsed_seconds() - factory.last_produced;
         if time_since_last_produced < production_interval {
@@ -42,6 +60,7 @@ fn create_unit(time: Res<Time>, mut scout_factories: Query<(&mut ScoutFactory, &
                     fire_rate: 2.,
                     asset_path: "alien_laser.png".to_string(),
                     last_shot: 0.,
+                    arc: PI / 8.,
                 }],
             },
         ));
