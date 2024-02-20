@@ -1,4 +1,4 @@
-use bevy::prelude::Component;
+use bevy::{math::Vec2, prelude::Component};
 
 use super::Gun;
 
@@ -56,4 +56,9 @@ pub struct UnitFactory {
 #[derive(Component)]
 pub struct ScoutFactory {
 
+}
+
+pub struct PathfinderGoal {
+    pub pos: Vec2,
+    pub range: f32,
 }
