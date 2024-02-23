@@ -11,6 +11,11 @@ pub struct Player {
 }
 
 #[derive(Component)]
+pub struct PlayerScout {
+
+}
+
+#[derive(Component)]
 pub struct Alien {}
 
 #[derive(Component)]

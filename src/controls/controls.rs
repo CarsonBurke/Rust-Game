@@ -1,4 +1,4 @@
-use bevy::{app::{App, Plugin, Update}, ecs::{system::{Res, Query}, query::With}, input::{Input, keyboard::KeyCode}, transform::components::Transform, time::Time};
+use bevy::{app::{App, Plugin, Update}, ecs::{system::{Res, Query}, query::With}, input::{keyboard::KeyCode}, transform::components::Transform, time::Time};
 
 use crate::{structs::Player};
 

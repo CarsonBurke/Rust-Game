@@ -15,7 +15,7 @@ use bevy::{
         schedule::IntoSystemConfigs,
         system::{Commands, Query, Res},
     },
-    input::{keyboard::KeyCode, Input},
+    input::{keyboard::KeyCode, ButtonInput},
     math::Quat,
     prelude::{App, Mut, Plugin, Update, Vec2, Vec3},
     render::camera::Camera,
@@ -66,7 +66,7 @@ fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 
 fn control_player_movement(
-    input: Res<Input<KeyCode>>,
+    input: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
     mut players: Query<(&mut Transform, &mut Player), With<Player>>,
 ) {
@@ -79,7 +79,7 @@ fn control_player_movement(
 }
 
 fn find_player_translation(
-    input: &Res<Input<KeyCode>>,
+    input: &Res<ButtonInput<KeyCode>>,
     time: &Res<Time>,
 ) -> Result<Vec2, ResultCode> {
     let speed = find_speed(input);
@@ -114,7 +114,7 @@ fn find_player_translation(
     return Ok(translation);
 }
 
-fn find_speed(input: &Res<Input<KeyCode>>) -> f32 {
+fn find_speed(input: &Res<ButtonInput<KeyCode>>) -> f32 {
     if input.pressed(control_keys::BOOST) {
         return player::BOOST_SPEED as f32;
     }
@@ -156,7 +156,7 @@ fn move_players(
 }
 
 fn control_player_shooting(
-    input: Res<Input<KeyCode>>,
+    input: Res<ButtonInput<KeyCode>>,
     mut players: Query<(&mut Transform, &mut Player), With<Player>>,
     mut commands: Commands,
     asset_server: Res<AssetServer>,
