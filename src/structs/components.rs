@@ -41,8 +41,11 @@ pub struct Bullet {
     pub range: f32,
 }
 
+#[derive(Component, Clone)]
+pub struct LightTile;
+
 #[derive(Component)]
-pub struct Tile;
+pub struct TerrainTile;
 
 #[derive(Component)]
 pub struct CameraShake {

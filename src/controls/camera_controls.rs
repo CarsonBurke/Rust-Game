@@ -43,7 +43,7 @@ fn control_camera_viewport(
         return;
     };
 
-    camera_transform.0.translation = player_transform.0.translation.clone();
+    camera_transform.translation = player_transform.translation.clone();
 }
 
 fn control_camera_zoom(

@@ -20,6 +20,7 @@ pub mod cursor;
 pub mod utils;
 pub mod buildings;
 pub mod units;
+pub mod lighting;
 
 fn main() {
     /* let startup = GameStartup; */

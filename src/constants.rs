@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::{HashMap, HashSet}, hash::Hash};
 
 pub mod map {
     pub const DIMENSIONS: i64 = 10000;
@@ -15,13 +15,37 @@ pub mod control_keys {
     pub const SHOOT: KeyCode = KeyCode::Space;
 }
 
-pub mod tiles {
+pub mod terrain_tiles {
     pub const SIZE: i32 = 250;
 }
 
 pub mod tile_grass {
     pub const ASSET_PATH: &str = "grass.png";
     pub const Z_POS: f32 = 0.;
+}
+
+pub enum TerrainTypes {
+    FlatGrass,
+    HillGrass,
+    FlatStone,
+    HillStone,
+    ShallowWater,
+    DeepWater,
+    FlatSand,
+    HillSand,
+}
+
+pub const LAND_IMPASSIGLE_TERRAIN_TYPES: HashSet<TerrainTypes> = HashSet::from((TerrainTypes::HillGrass, TerrainTypes::HillStone, TerrainTypes::HillSand, TerrainTypes::DeepWater));
+
+pub enum LandImpassibleTerrainTypes {
+    HillGrass,
+    HillStone,
+    HillSand,
+    DeepWater,
+}
+
+pub mod light_tiles {
+    pub const SIZE: i32 = 8;
 }
 
 pub mod player {
