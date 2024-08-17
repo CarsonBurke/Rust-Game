@@ -1,5 +1,7 @@
 use std::{collections::{HashMap, HashSet}, hash::Hash};
 
+use lazy_static::lazy_static;
+
 pub mod map {
     pub const DIMENSIONS: i64 = 10000;
 }
@@ -24,7 +26,8 @@ pub mod tile_grass {
     pub const Z_POS: f32 = 0.;
 }
 
-pub enum TerrainTypes {
+#[derive(Hash, Eq, PartialEq)]
+pub enum Terrain {
     FlatGrass,
     HillGrass,
     FlatStone,
@@ -35,9 +38,7 @@ pub enum TerrainTypes {
     HillSand,
 }
 
-pub const LAND_IMPASSIGLE_TERRAIN_TYPES: HashSet<TerrainTypes> = HashSet::from((TerrainTypes::HillGrass, TerrainTypes::HillStone, TerrainTypes::HillSand, TerrainTypes::DeepWater));
-
-pub enum LandImpassibleTerrainTypes {
+pub enum LandImpassibleTerrain {
     HillGrass,
     HillStone,
     HillSand,

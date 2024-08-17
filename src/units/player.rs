@@ -4,7 +4,7 @@ use crate::{
     constants::{bullet, control_keys, player, ResultCode},
     cursor,
     structs::{Bullet, Gun, Player},
-    utils::Utils,
+    utils,
 };
 use bevy::{
     app::Startup,
@@ -111,17 +111,17 @@ fn find_player_translation(
     translation.x *= delta_seconds;
     translation.y *= delta_seconds;
 
-    return Ok(translation);
+    Ok(translation)
 }
 
 fn find_speed(input: &Res<ButtonInput<KeyCode>>) -> f32 {
     if input.pressed(control_keys::BOOST) {
-        return player::BOOST_SPEED as f32;
+        return player::BOOST_SPEED;
     }
 
     // Otherwise we aren't boosting
 
-    return player::SPEED as f32;
+    player::SPEED
 }
 
 fn apply_player_translation(translation: Vec2, player_tuple: (Mut<Transform>, Mut<Player>)) {
@@ -134,7 +134,7 @@ fn apply_player_translation(translation: Vec2, player_tuple: (Mut<Transform>, Mu
 
     /* let angle = player_direction.angle_between(translation_direction); */
     /* let rotation = Quat::from_rotation_arc(Vec3::Y, to_translation.extend(0.)); */
-    let angle = /* player_transform.local_y().truncate().angle_between(translation * player_transform.translation.truncate()) */Utils::find_angle( to_translation.x, to_translation.y, player_transform.translation.x, player_transform.translation.y) + PI/2.;
+    let angle = /* player_transform.local_y().truncate().angle_between(translation * player_transform.translation.truncate()) */utils::find_angle( to_translation.x, to_translation.y, player_transform.translation.x, player_transform.translation.y) + PI/2.;
     let rotation = Quat::from_rotation_z(angle);
     /* println!("Change player angle {}, rotation {}" , angle, rotation); */
     player_transform.rotation = rotation;
@@ -196,7 +196,7 @@ fn control_player_shooting(
         );
 
         // Then we find the angle between current forward direction and desired one
-        let angle = Utils::find_angle(player_transform.translation.x, player_transform.translation.y, cursor_pos.x, cursor_pos.y) - PI/2./* player_dir.angle_between(cursor_dir) */;
+        let angle = utils::find_angle(player_transform.translation.x, player_transform.translation.y, cursor_pos.x, cursor_pos.y) - PI/2./* player_dir.angle_between(cursor_dir) */;
         let rotation = Quat::from_rotation_z(angle);
 
         player_transform.rotation = rotation;
@@ -253,7 +253,7 @@ fn find_cursor_position(
         return Vec2 { x: 0., y: 0. };
     };
 
-    return cursor_pos;
+    cursor_pos
 }
 
 fn cursor_events(mut cursor_evr: EventReader<CursorMoved>) {

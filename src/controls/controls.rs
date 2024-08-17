@@ -8,6 +8,6 @@ pub struct ControlsPlugin;
 
 impl Plugin for ControlsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((CameraControlsPlugin));
+        app.add_plugins(CameraControlsPlugin);
     }
 }

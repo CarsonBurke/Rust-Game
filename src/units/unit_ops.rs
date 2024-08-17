@@ -16,7 +16,7 @@ use bevy::{
 use crate::{
     constants::bullet,
     structs::{Bullet, Gun, Unit},
-    utils::Utils,
+    utils,
 };
 
 pub fn try_fire_all_guns(
@@ -29,7 +29,7 @@ pub fn try_fire_all_guns(
 ) {
 
     let max_range = find_max_range_of_guns(guns);
-    let range_to_target: f32 = Utils::range(
+    let range_to_target: f32 = utils::range(
         unit_transform.translation.x,
         unit_transform.translation.y,
         target_pos.x,
@@ -40,7 +40,7 @@ pub fn try_fire_all_guns(
     }
 
     // Then we find the angle between current forward direction and desired one
-    let angle = Utils::find_angle(unit_transform.translation.x, unit_transform.translation.y, target_pos.x, target_pos.y) - PI/2./* unit_dir.angle_between(cursor_dir) */;
+    let angle = utils::find_angle(unit_transform.translation.x, unit_transform.translation.y, target_pos.x, target_pos.y) - PI/2./* unit_dir.angle_between(cursor_dir) */;
     let rotation = Quat::from_rotation_z(angle);
 
     unit_transform.rotation = rotation;
@@ -93,11 +93,11 @@ fn find_max_range_of_guns(guns: &mut Vec<Gun>) -> f32 {
         max_range = gun.range
     }
 
-    return max_range
+    max_range
 }
 
 fn is_gun_out_of_range(gun: &mut Gun, unit_transform: &mut Transform, target_pos: &Vec2) -> bool {
-    let range = Utils::range(
+    let range = utils::range(
         unit_transform.translation.x,
         unit_transform.translation.y,
         target_pos.x,
